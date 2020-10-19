@@ -1,0 +1,36 @@
+.home {
+    padding-bottom: 50px;
+    .content {
+        height: 100%;
+    }
+    .footer {
+        position: fixed;
+        z-index: 999;
+        width: 100%;
+        bottom: 0;
+        height: 50px;
+        border-top: 1px solid #ccc;
+        background-color: #fff;
+        ul {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            li {
+                flex: 1;
+                text-align: center;
+                a {
+                    color: #666;
+                    span {
+                        font-size: 18px;
+                    }
+                    p {
+                        font-size: 12px;
+                    }
+                }
+                .active {
+                    color: #21b97a;
+                }
+            }
+        }
+    }
+}
