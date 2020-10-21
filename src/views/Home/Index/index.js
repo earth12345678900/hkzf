@@ -13,6 +13,7 @@ import img1 from 'images/nav-1.png'
 import img2 from 'images/nav-2.png'
 import img3 from 'images/nav-3.png'
 import img4 from 'images/nav-4.png'
+import { getCurrentCity } from 'utils/city';
 
 const navList = [
     { title: '整租', path: '/home/house', img: img1 },
@@ -21,7 +22,7 @@ const navList = [
     { title: '去出租', path: '/rent', img: img4 }
 ]
 
-const { BMap } = window
+// const { BMap } = window
 
 export default class Index extends Component {
     state = {
@@ -31,31 +32,41 @@ export default class Index extends Component {
         city: {},
         imgHeight: (212 / 375) * window.innerWidth,
     }
-    componentDidMount() {
+    async componentDidMount() {
+        // 获取当前城市
+        const city = await getCurrentCity()
+        this.setState({
+            city: city
+        }, () => {
+            // 需要得到城市的信息后才能渲染 所以放在setstate的回调函数里
+            this.getSwiperList()
+            this.getGroupList()
+            this.getNewsList()
+        })
         // 放setState的回调函数里
         // this.getSwiperList()
-
         // this.getGroupList()
-
         // this.getNewsList()
 
-        //获取当前城市
-        var city = new BMap.LocalCity();
-        // 根据定位的城市发送请求 获取城市的信息
-        city.get(async (result) => {
-            const res = await requestCityInfo(result.name)
-            // console.log(res);
-            if (res.status === 200) {
-                this.setState({
-                    city: res.body
-                }, () => {
-                    // 需要得到城市的信息后才能渲染 所以放在setstate的回调函数里
-                    this.getSwiperList()
-                    this.getGroupList()
-                    this.getNewsList()
-                })
-            }
-        });
+        // //获取当前城市
+        // var city = new BMap.LocalCity();
+        // // 根据定位的城市发送请求 获取城市的信息
+        // city.get(async (result) => {
+        //     const res = await requestCityInfo(result.name)
+        //     // console.log(res);
+        //     if (res.status === 200) {
+        //         // 讲当前定位的城市存在内存
+        //         localStorage.setItem('current_city', JSON.stringify(res.body))
+        //         this.setState({
+        //             city: res.body
+        //         }, () => {
+        //             // 需要得到城市的信息后才能渲染 所以放在setstate的回调函数里
+        //             this.getSwiperList()
+        //             this.getGroupList()
+        //             this.getNewsList()
+        //         })
+        //     }
+        // });
     }
 
     // 获取轮播图数据
@@ -64,7 +75,7 @@ export default class Index extends Component {
         // const res = await axios(BASE_URL + '/home/swiper')
         // const res = await axios('/home/swiper')
         const res = await requestSwiperList()
-        console.log(res.data);
+        // console.log(res.data);
         // 配置了拦截器
         // const { body, status } = res.data
         const { body, status } = res

@@ -32,3 +32,17 @@ export function requestCityInfo(name) {
         }
     })
 }
+
+// 获取城市列表数据
+export function requestCityList(level = 1) {
+    return axios.get('/area/city', {
+        params: {
+            level: level
+        }
+    })
+}
+
+// 获取热门城市
+export function requestHotCity() {
+    return axios.get('/area/hot')
+}
