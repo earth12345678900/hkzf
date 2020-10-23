@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import HmNavBar from 'components/HmNavBar/index'
 import './index.scss'
-import { requestHotCity, requestCityList } from 'api/home'
+import { requestHotCity, requestCityList } from 'api/city'
 import { getCurrentCity, setCurrentCity } from 'utils/city'
 import { List, AutoSizer } from 'react-virtualized';
 import { Toast } from 'antd-mobile'

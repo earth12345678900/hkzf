@@ -34,7 +34,7 @@
 
 
 // Promise 封装 + 回调函数
-import { requestCityInfo } from 'api/home'
+import { requestCityInfo } from 'api/city'
 const { BMap } = window
 const KEY = 'current_city'
 // 1.使用回调函数解决异步问题
