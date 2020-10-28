@@ -4,8 +4,8 @@ import styles from './index.module.scss'
 import { requestChildCity, requestHouseList } from 'api/map'
 import { getCurrentCity } from 'utils/city'
 import { Toast } from 'antd-mobile'
-import { BASE_URL } from 'utils/config'
 import classNames from 'classnames'
+import HmHouseItem from 'components/HmHouseItem'
 
 const { BMap } = window
 
@@ -190,29 +190,9 @@ export default class Map extends Component {
                     </div>
                     <div className="houseItems">
                         {
-                            this.state.houseList.map(item => (<div className="house" key={item.houseCode}>
-                                <div className="imgWrap">
-                                    <img
-                                        className="img"
-                                        src={BASE_URL + item.houseImg}
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="content">
-                                    <h3 className="title">
-                                        {item.title}
-                                    </h3>
-                                    <div className="desc">{item.desc}</div>
-                                    <div>
-                                        {
-                                            item.tags.map((tag, index) => <span className={classNames('tag', 'tag' + ((index % 3) + 1))} key={tag}>{tag}</span>)
-                                        }
-                                    </div>
-                                    <div className="price">
-                                        <span className="priceNum">{item.price}</span> 元/月
-                                     </div>
-                                </div>
-                            </div>))
+                            this.state.houseList.map(item => (
+                                <HmHouseItem house={item} key={item.houseCode}></HmHouseItem>
+                            ))
                         }
                     </div>
                 </div>

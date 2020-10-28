@@ -14,6 +14,7 @@ import img2 from 'images/nav-2.png'
 import img3 from 'images/nav-3.png'
 import img4 from 'images/nav-4.png'
 import { getCurrentCity } from 'utils/city';
+import HmSearchBar from 'components/HmSearchBar'
 
 const navList = [
     { title: '整租', path: '/home/house', img: img1 },
@@ -218,20 +219,7 @@ export default class Index extends Component {
     // 搜索框
     renderSearch() {
         return (
-            <Flex className="search-box">
-                <Flex className="search-form">
-                    <div className="location" onClick={() => this.props.history.push('/city')}>
-                        <span className="name">{this.state.city.label}</span>
-                        <i className="iconfont icon-arrow"> </i>
-                    </div>
-                    <div className="search-input">
-                        <i className="iconfont icon-seach" />
-                        <span className="text">请输入小区地址</span>
-                    </div>
-                </Flex>
-                {/* 地图小图标 */}
-                <i className="iconfont icon-map" onClick={() => this.props.history.push('/map')} />
-            </Flex>
+            <HmSearchBar>{this.state.city.label || '上海'}</HmSearchBar>
         )
     }
 
@@ -254,7 +242,6 @@ export default class Index extends Component {
 
                 {/* 最新资讯 */}
                 <div className="news">{this.renderNews()}</div>
-
 
             </div>
         )

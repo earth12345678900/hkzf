@@ -1,0 +1,29 @@
+.houseList {
+    :global {
+      .header {
+        padding-left: 10px;
+        display: flex;
+        height: 45px;
+        background-color: pink;
+        align-items: center;
+        .search {
+          width: 100%;
+          .search-box {
+            position: static;
+          }
+        }
+      }
+      .placeholder {
+        padding: 5px 10px;
+        p {
+          height: 100%;
+          width: 100%;
+          background-color: #ccc;
+        }
+      }
+      .ReactVirtualized__List {
+        padding-bottom: 45px;
+      }
+    }
+  }
+  

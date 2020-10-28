@@ -10,10 +10,11 @@ export function requestChildCity(id) {
 }
 
 // 获取房屋具体信息
-export function requestHouseList(id) {
+export function requestHouseList(id, params) {
     return axios.get('/houses', {
         params: {
-            cityId: id
+            cityId: id,
+            ...params
         }
     })
 }
