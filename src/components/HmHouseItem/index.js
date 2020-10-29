@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import classNames from 'classnames'
 import { BASE_URL } from 'utils/config'
 import styles from './index.module.scss'
+import { withRouter } from 'react-router-dom'
 
-export default class HmHouseItem extends Component {
+class HmHouseItem extends Component {
     render() {
-        const { house } = this.props
+        const { house, history } = this.props
         return (
-            <div className={styles.house} style={this.props.style}>
+            <div className={styles.house} style={this.props.style} onClick={() => { history.push(`/detail/${house.houseCode}`) }}>
                 <div className="imgWrap">
                     <img
                         className="img"
@@ -33,3 +34,5 @@ export default class HmHouseItem extends Component {
         )
     }
 }
+
+export default withRouter(HmHouseItem)

@@ -9,3 +9,7 @@ export function requestCondition(id) {
         }
     })
 }
+
+export function requestHouseDetail(id) {
+    return axios.get('/houses/' + id)
+}
