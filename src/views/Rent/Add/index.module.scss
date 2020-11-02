@@ -1,0 +1,41 @@
+.add {
+  :global {
+    .am-list .am-list-item {
+      .am-list-content,
+      .am-input-label {
+        font-size: 14px;
+        color: #666;
+      }
+      .am-list-extra,
+      .am-input-extra,
+      .am-input-control {
+        input {
+          font-size: 14px;
+        }
+      }
+    }
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      height: 45px;
+      z-index: 1;
+      color: #fff;
+      font-size: 15px;
+      background-color: #fff;
+    }
+
+    .cancel {
+      color: #21b97a;
+      background-color: #fff;
+      height: 100%;
+      line-height: 45px;
+    }
+    .confirm {
+      height: 45px;
+      line-height: 45px;
+      background-color: #21b97a;
+    }
+  }
+}

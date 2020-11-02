@@ -1,4 +1,5 @@
 // 导入自己封装的axios
+import { getToken } from 'utils'
 import axios from './axios'
 
 // 首页轮播图
@@ -22,4 +23,17 @@ export function requestNewsList(area) {
             area: area
         }
     })
+}
+
+// 登陆
+export function reqLogin(username, password) {
+    return axios.post('/user/login', {
+        username,
+        password
+    })
+}
+
+// 获取用户信息
+export function reqUserInfo() {
+    return axios.get('/user')
 }

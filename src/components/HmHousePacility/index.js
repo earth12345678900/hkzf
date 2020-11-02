@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styles from './index.module.scss'
+import classNames from 'classnames'
 
 // 所有房屋配置项
 const HOUSE_PACKAGE = [
@@ -56,17 +58,34 @@ const HOUSE_PACKAGE = [
 ]
 
 class HmHousePacility extends Component {
+    static propTypes = {
+        supporting: PropTypes.array,
+        onSelect: PropTypes.func
+    }
+    state = {
+        list: []
+    }
+
     render() {
+        const { supporting, onSelect } = this.props
         // console.log(this.props.supporting)
-        const data = this.props.supporting.map((item) => {
-            return HOUSE_PACKAGE.find((v) => v.name === item)
-        })
+        let data
+        // 如果有supporting显示传过来的数组 没有 显示所有数据
+        if (supporting) {
+            data = this.props.supporting.map((item) => {
+                return HOUSE_PACKAGE.find((v) => v.name === item)
+            })
+        } else {
+            data = HOUSE_PACKAGE
+        }
         // console.log(data)
         return (
             <ul className={styles['house-package']}>
                 {data.map((item) => (
-                    <li key={item.id} className="item">
-                        <p>
+                    // 数组中选中的值有高亮
+                    <li key={item.id} className={classNames('item', { active: this.state.list.includes(item.name) })}>
+                        {/* 有选择列表注册点击事件 否则不注册 */}
+                        <p onClick={onSelect ? this.onClick.bind(this, item.name) : null}>
                             <i className={`iconfont icon ${item.icon}`} />
                         </p>
                         {item.name}
@@ -74,6 +93,21 @@ class HmHousePacility extends Component {
                 ))}
             </ul>
         )
+    }
+
+    onClick = (name) => {
+        // console.log(name);
+        // 判断name是否在数组中 在:删除 不在：添加
+        let arr = [...this.state.list]
+        if (arr.includes(name)) {
+            arr = arr.filter(item => item !== name)
+        } else {
+            arr.push(name)
+        }
+        this.setState({
+            list: arr
+        })
+        this.props.onSelect(arr)
     }
 }
 

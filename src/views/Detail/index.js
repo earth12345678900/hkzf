@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import styles from './index.module.scss'
-import { requestHouseDetail } from 'api/house'
-import { Carousel, Flex, Modal } from 'antd-mobile'
+import { requestAddFavorite, requestDelFavorite, requestHouseDetail } from 'api/house'
+import { Carousel, Flex, Modal, Toast } from 'antd-mobile'
 import { BASE_URL } from 'utils/config'
 import HmNavBar from 'components/HmNavBar'
 import classNames from 'classnames'
 import HmHousePacility from 'components/HmHousePacility'
 import HmHouseItem from 'components/HmHouseItem'
+import { hasToken } from 'utils/token'
+import { requestCheckFavorite } from 'api/house'
 
 const { BMap } = window
 
@@ -40,7 +42,8 @@ const recommendHouses = [
 
 export default class Detail extends Component {
     state = {
-        detail: ''
+        detail: '',
+        isFavorite: false
     }
     render() {
         const { detail } = this.state
@@ -188,11 +191,11 @@ export default class Detail extends Component {
                 <Flex className="fixedBottom">
                     <Flex.Item onClick={this.handleFavorite}>
                         <img
-                            src={BASE_URL + '/img/unstar.png'}
+                            src={this.state.isFavorite ? BASE_URL + '/img/star.png' : BASE_URL + '/img/unstar.png'}
                             className="favoriteImg"
                             alt="收藏"
                         />
-                        <span className="favorite">收藏</span>
+                        <span className="favorite">{this.state.isFavorite ? '已收藏' : '收藏'}</span>
                     </Flex.Item>
                     <Flex.Item>在线咨询</Flex.Item>
                     <Flex.Item>
@@ -208,8 +211,23 @@ export default class Detail extends Component {
     async componentDidMount() {
         // 房屋具体信息
         await this.getHouseDetail()
+        // 获取房屋是否被收藏
+        this.getFavorite()
         // 渲染地图
         this.initMap()
+    }
+
+    async getFavorite() {
+        // 没有token
+        if (!hasToken()) return
+        // 有token 发送请求获取收藏状态
+        // 房屋id从地址栏中获取
+        // const { id } = this.props.match.params
+        const res = await requestCheckFavorite(this.id)
+        // 将isFavorite设置为传过来的值
+        this.setState({
+            isFavorite: res.body.isFavorite
+        })
     }
 
     initMap = () => {
@@ -249,6 +267,7 @@ export default class Detail extends Component {
 
     async getHouseDetail() {
         const { id } = this.props.match.params
+        this.id = id
         console.log(id);
         const res = await requestHouseDetail(id)
         console.log(res);
@@ -259,12 +278,36 @@ export default class Detail extends Component {
         }
     }
 
-    handleFavorite = () => {
-        // 弹窗跳转到登陆
-        Modal.alert('温馨提示', '登录后才能收藏房源，是否去登陆', [
-            { text: '取消' },
-            // 按确定跳转到登陆页面
-            { text: '确定', onPress: () => { this.props.history.push('/login') } }
-        ])
+    handleFavorite = async () => {
+        if (!hasToken()) {
+            // 没登录
+            // 弹窗跳转到登陆
+            return Modal.alert('温馨提示', '登录后才能收藏房源，是否去登陆', [
+                { text: '取消' },
+                // 按确定跳转到登陆页面
+                // { text: '确定', onPress: () => { this.props.history.push('/login') } }
+                {
+                    text: '确定', onPress: () => {
+                        this.props.history.push({
+                            pathname: '/login',
+                            state: { from: this.props.location }
+                        })
+                    }
+                }
+            ])
+        }
+        // 登陆了
+        let res
+        if (this.state.isFavorite) {
+            res = await requestDelFavorite(this.id)
+        } else {
+            res = await requestAddFavorite(this.id)
+        }
+        // 删除或者添加成功 重新获取列表状态
+        if (res.status === 200) {
+            Toast.success(res.description)
+            // 重新获取状态
+            this.getFavorite()
+        }
     }
 }
